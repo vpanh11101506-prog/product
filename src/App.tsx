@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
 import { HobbiesZone } from './components/HobbiesZone';
-import { PolaroidPinboard } from './components/PolaroidPinboard';
 import { SkillInventory } from './components/SkillInventory';
 import { SocialModal } from './components/SocialModal';
 import { TopNav } from './components/TopNav';
@@ -76,7 +75,6 @@ export default function App() {
             <HeroSection onOpenContact={handleOpenContact} />
             <SkillInventory />
             <HobbiesZone />
-            <PolaroidPinboard onOpenContact={handleOpenContact} />
           </main>
 
           {/* Retro Social Popup Modal */}

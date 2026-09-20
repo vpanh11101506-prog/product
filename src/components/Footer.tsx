@@ -29,12 +29,16 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
             {t.worldMap}
           </a>
           <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#skills"
             className="text-[#d1c5ad] font-['Space_Mono'] text-xs hover:text-[#f6c833] uppercase font-bold transition-colors"
           >
-            {t.sourceCode}
+            {TRANSLATIONS[language].nav.skills}
+          </a>
+          <a
+            href="#hobbies"
+            className="text-[#d1c5ad] font-['Space_Mono'] text-xs hover:text-[#f6c833] uppercase font-bold transition-colors"
+          >
+            {TRANSLATIONS[language].nav.hobbies}
           </a>
           <button
             type="button"
@@ -43,12 +47,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
           >
             {t.contact}
           </button>
-          <a
-            href="#guestbook"
-            className="text-[#d1c5ad] font-['Space_Mono'] text-xs hover:text-[#f6c833] uppercase font-bold transition-colors"
-          >
-            {t.reportBug}
-          </a>
         </nav>
       </div>
     </footer>

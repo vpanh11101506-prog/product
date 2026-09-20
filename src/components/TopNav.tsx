@@ -74,12 +74,6 @@ export const TopNav: React.FC<TopNavProps> = ({ onOpenContact }) => {
           >
             {t.hobbies}
           </a>
-          <a
-            href="#guestbook"
-            className="text-[#d1c5ad] font-['Space_Mono'] text-xs hover:text-[#f6c833] pb-1 uppercase font-bold transition-colors"
-          >
-            {t.memories}
-          </a>
           <button
             type="button"
             className="text-[#45b7d1] font-['Space_Mono'] text-xs hover:text-[#f6c833] pb-1 uppercase font-bold flex items-center gap-1 cursor-pointer transition-colors"

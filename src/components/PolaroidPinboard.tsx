@@ -6,19 +6,25 @@ import { compressImage } from '../utils/imageCompressor';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { TRANSLATIONS } from '../utils/translations';
+import { POLAROID_ITEMS } from '../data/portfolioData';
 
 interface PolaroidPinboardProps {
   onOpenContact: (e?: React.MouseEvent) => void;
 }
 
-const LOCAL_STORAGE_KEY = 'pa_custom_polaroids_v7';
+const LOCAL_STORAGE_KEY = 'pa_custom_polaroids_v8';
 
 /**
  * Ensures photo URL resolves directly without any hardcoded AI fallbacks.
  */
 export function resolvePolaroidImage(item?: PolaroidItem | null): string {
   if (!item || !item.image) return '';
-  return typeof item.image === 'string' ? item.image : '';
+  const img = typeof item.image === 'string' ? item.image : '';
+  if (!img) return '';
+  if (img.startsWith('http') || img.startsWith('/') || img.startsWith('data:')) {
+    return img;
+  }
+  return `/uploads/${img}`;
 }
 
 // Pre-upload pending item structure
@@ -43,14 +49,14 @@ export const PolaroidPinboard: React.FC<PolaroidPinboardProps> = ({ onOpenContac
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved !== null) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed;
         }
       }
     } catch {
       // ignore JSON error
     }
-    return [];
+    return POLAROID_ITEMS;
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
