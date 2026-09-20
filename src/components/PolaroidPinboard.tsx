@@ -12,7 +12,7 @@ interface PolaroidPinboardProps {
   onOpenContact: (e?: React.MouseEvent) => void;
 }
 
-const LOCAL_STORAGE_KEY = 'pa_custom_polaroids_v8';
+const LOCAL_STORAGE_KEY = 'pa_custom_polaroids_v12';
 
 /**
  * Ensures photo URL resolves directly without any hardcoded AI fallbacks.
@@ -49,7 +49,7 @@ export const PolaroidPinboard: React.FC<PolaroidPinboardProps> = ({ onOpenContac
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved !== null) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return parsed;
         }
       }
@@ -71,38 +71,13 @@ export const PolaroidPinboard: React.FC<PolaroidPinboardProps> = ({ onOpenContac
         const serverState = await fetchPortfolioState();
         if (!isMounted) return;
 
-        // Trường hợp 1: Máy chủ đã có ảnh => Máy chủ là chân lý tuyệt đối cho mọi máy khách
-        if (serverState && Array.isArray(serverState.photos) && serverState.photos.length > 0) {
+        // Máy chủ là chân lý tuyệt đối cho mọi máy khách
+        if (serverState && Array.isArray(serverState.photos)) {
           setPolaroidList(serverState.photos);
           try {
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverState.photos));
           } catch {
             // ignore
-          }
-        }
-        // Trường hợp 2: Máy chủ chưa có ảnh (hoặc vừa được khởi động), nhưng máy này đã có ảnh trong localStorage
-        // (tức là trước đó Admin đã ghim ảnh trên máy này nhưng chưa lưu lên server):
-        // => Tự động ĐẨY TOÀN BỘ ẢNH LÊN MÁY CHỦ ngay lập tức để tất cả máy khác mở link đều thấy!
-        else {
-          const localSaved = localStorage.getItem(LOCAL_STORAGE_KEY);
-          if (localSaved) {
-            try {
-              const parsed = JSON.parse(localSaved);
-              if (Array.isArray(parsed) && parsed.length > 0) {
-                setPolaroidList(parsed);
-                // Nếu là Admin hoặc có phiên đăng nhập, đồng bộ ngay lên server
-                const token = getStoredAdminToken();
-                if (token || isAdmin) {
-                  console.log('[Polaroid] Pushing local photos to server for all devices...');
-                  const pushRes = await saveServerPhotos(parsed);
-                  if (pushRes.success && pushRes.photos) {
-                    setPolaroidList(pushRes.photos);
-                  }
-                }
-              }
-            } catch {
-              // ignore
-            }
           }
         }
       } catch (err) {
@@ -119,10 +94,9 @@ export const PolaroidPinboard: React.FC<PolaroidPinboardProps> = ({ onOpenContac
         if (!isMounted) return;
         if (serverState && Array.isArray(serverState.photos)) {
           setPolaroidList((prev) => {
-            // So sánh nếu có sự thay đổi thì mới render lại
             const prevStr = JSON.stringify(prev);
             const serverStr = JSON.stringify(serverState.photos);
-            if (prevStr !== serverStr && serverState.photos!.length > 0) {
+            if (prevStr !== serverStr) {
               try {
                 localStorage.setItem(LOCAL_STORAGE_KEY, serverStr);
               } catch {

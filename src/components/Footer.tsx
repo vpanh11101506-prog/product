@@ -40,6 +40,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
           >
             {TRANSLATIONS[language].nav.hobbies}
           </a>
+          <a
+            href="#guestbook"
+            className="text-[#d1c5ad] font-['Space_Mono'] text-xs hover:text-[#f6c833] uppercase font-bold transition-colors"
+          >
+            {TRANSLATIONS[language].nav.memories}
+          </a>
           <button
             type="button"
             onClick={onOpenContact}
